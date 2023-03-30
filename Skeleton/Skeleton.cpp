@@ -99,25 +99,32 @@ vec3 moveVector(vec3 p, vec3 v0, float t) {
 }
 
 vec3 perpendicularVector(vec3 p, vec3 v) {
-	v = hnormalize(v);
+	//printf("%f %f %f -> ", v.x, v.y, v.z);
+	//v = normalize(v);
+	//printf("%f %f %f\n", v.x, v.y, v.z);
 	p.z = -p.z;
-	//p = hnormalize(p);
+	printf("%f %f %f -> ", p.x, p.y, p.z);
+	//p = normalize(p);
+	printf("%f %f %f\n", p.x, p.y, p.z);
 	v.z = -v.z;
 	float nx = p.y * v.z - p.z * v.y;
 	float ny = p.z * v.x - p.x * v.z;
 	float nz = p.x * v.y - p.y * v.x;
 	vec3 val = vec3(nx, ny, nz);
-	val = hnormalize(val);
+	printf("%f ", hlength(val));
+	//val = normalize(val);
+	printf("%f\n", hlength(val));
 	calculateW(p, val);
 	return val;
 }
 
 vec3 rotate(vec3 p, vec3 v, float fi) {
-	v = hnormalize(v);
+	//v = hnormalize(v);
 	vec3 vp = perpendicularVector(p, v);
 	vec3 rot = v * cosf(fi) + vp * sinf(fi);
-	rot = hnormalize(rot);
 	calculateW(p, rot);
+	//rot = normalize(rot);
+	
 	return rot;
 }
 
@@ -203,6 +210,7 @@ public:
 			V = vec3(1.0f, 0.0f, 0.0f);
 			calculateW(center, V);
 			V = rotate(center, V, fi);
+			//V = perpendicularVector(center, V);
 			vec3 newpoint = movePoint(center, V, 0.5);
 			calculateW(newpoint);
 			if (!onMinkowsky(newpoint)) {
@@ -343,6 +351,6 @@ void onMouse(int button, int state, int pX, int pY) { // pX, pY are the pixel co
 // Idle event indicating that some time elapsed: do animation here
 void onIdle() {
 	long time = glutGet(GLUT_ELAPSED_TIME); // elapsed time since the start of the program
-	/*if(time % 2 == 0)
+	if(time % 2 == 0)
 		greenHami.Move();
-}*/
+}
